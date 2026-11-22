@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta Digital - Dr. Fernando Morales | Dr. Nais, S.A.</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Paleta Corporativa Médica & Salud Moderna - Dr. Nais, S.A. */
+            --nais-navy: #0A2540;
+            --nais-blue: #0066CC;
+            --nais-teal: #00A896;
+            --nais-teal-light: #38D9A9;
+            --nais-dark-bg: #051526;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: var(--nais-dark-bg);
+            background-image: 
+                radial-gradient(rgba(0, 102, 204, 0.28) 1.2px, transparent 1.2px),
+                radial-gradient(rgba(0, 168, 150, 0.18) 1.2px, transparent 1.2px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            color: #0f172a;
+        }
+
+        .heading-font {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Contenedor tipo Tarjeta Profesional Móvil */
+        .card-container {
+            width: 100%;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 168, 150, 0.2);
+        }
+
+        @media (min-width: 480px) {
+            .card-container {
+                max-width: 450px;
+                margin: 2rem auto;
+                min-height: auto;
+                border-radius: 28px;
+                overflow: hidden;
+                border: 1px solid rgba(0, 168, 150, 0.35);
+            }
+        }
+
+        /* BANNER SUPERIOR CORPORATIVO DR. NAIS, S.A. */
+        .banner-container {
+            width: 100%;
+            height: 165px;
+            background: linear-gradient(135deg, #051526 0%, #0A2540 48%, #0052A3 100%);
+            position: relative;
+            border-bottom: 3px solid #00A896;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 1.25rem 2.2rem 1.25rem;
+            text-align: center;
+        }
+
+        .banner-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.12;
+            background-image: radial-gradient(#38D9A9 1.2px, transparent 1.2px);
+            background-size: 16px 16px;
+            pointer-events: none;
+        }
+
+        /* Sección del contenido de la tarjeta */
+        .content-section {
+            background: linear-gradient(180deg, #ffffff 0%, #f4f9fc 100%);
+            position: relative;
+            padding-bottom: 2.5rem;
+            flex-grow: 1;
+        }
+
+        /* Contenedor de la foto de perfil */
+        .profile-container {
+            position: relative;
+            width: 124px;
+            height: 124px;
+            margin: -56px auto 0 auto;
+            z-index: 10;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 9999px;
+            border: 3.5px solid #00A896;
+            box-shadow: 0 12px 28px rgba(10, 37, 64, 0.32), 0 0 0 4px #ffffff;
+            background: linear-gradient(135deg, #0A2540 0%, #0066CC 100%);
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+        }
+
+        /* Tarjeta interactiva de enlace */
+        .info-card {
+            border-radius: 14px;
+            padding: 0.95rem 1.1rem;
+            transition: all 0.25s ease;
+        }
+        .info-card:hover {
+            box-shadow: 0 8px 22px rgba(10, 37, 64, 0.16);
+            transform: translateY(-1.5px);
+        }
+
+        /* Notificación Toast */
+        .toast-notification {
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+    <div class="card-container">
+        
+        <!-- Franja superior corporativa Dr. Nais, S.A. -->
+        <div class="h-1.5 w-full" style="background: linear-gradient(90deg, #0A2540 0%, #00A896 50%, #0066CC 100%);"></div>
+
+        <!-- BARRA INSTITUCIONAL Y COMPARTIR -->
+        <div class="px-4 py-2.5 flex items-center justify-between border-b" style="background-color: #051526; border-color: #0e3459;">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-stethoscope text-xs" style="color: #38D9A9;"></i>
+                <span class="text-[11px] font-extrabold text-white tracking-widest uppercase heading-font">Dr. Nais, S.A.</span>
+            </div>
+            <button type="button" id="share-btn" onclick="shareCard()" class="text-slate-200 hover:text-teal-300 active:scale-95 px-2.5 py-1.5 rounded-lg transition-all text-xs flex items-center gap-1.5 font-semibold cursor-pointer relative z-20" title="Compartir Tarjeta">
+                <i class="fas fa-share-alt"></i>
+                <span class="text-[10px]">Compartir</span>
+            </button>
+        </div>
+
+        <!-- BANNER SUPERIOR -->
+        <div class="banner-container">
+            <div class="banner-pattern"></div>
+            <span class="text-[10px] font-bold uppercase tracking-[0.25em] mb-1 z-10" style="color: #38D9A9;">
+                Servicios Médicos &amp; Salud Integral
+            </span>
+            <h2 class="text-base sm:text-lg font-extrabold text-white tracking-wide uppercase heading-font max-w-xs leading-snug z-10">
+                Dr. Nais, S.A.
+            </h2>
+        </div>
+
+        <!-- CONTENIDO PRINCIPAL DE LA TARJETA -->
+        <div class="content-section">
+            <div class="flex flex-col items-center px-5 text-center">
+                
+                <!-- Foto de Perfil Oficial -->
+                <div class="profile-container">
+                    <img src="https://i.postimg.cc/L67wF68z/Captura-de-pantalla-2026-11-22-162304.png" 
+                         alt="Dr. Fernando Morales - Dr. Nais, S.A." 
+                         class="profile-pic object-top"
+                         onerror="this.onerror=null; this.src='https://placehold.co/300x300/0A2540/38D9A9?text=Dr.+FM';" />
+                </div>
+
+                <!-- Nombre Principal y Cargo -->
+                <div class="mt-4 flex flex-col items-center justify-center">
+                    <h1 class="text-2xl font-black tracking-tight heading-font" style="color: #0A2540;">Dr. Fernando Morales</h1>
+                    
+                    <div class="inline-flex items-center mt-2 px-4 py-1.5 rounded-full border shadow-sm" style="background-color: #eef7f6; border-color: #00A896;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider" style="color: #0A2540;">
+                            Director Médico
+                        </span>
+                    </div>
+
+                    <p class="mt-2.5 text-xs font-bold max-w-xs leading-relaxed" style="color: #0066CC;">
+                        Dr. Nais, S.A. — Atención Médica Especializada
+                    </p>
+
+                    <!-- Pilares / Especialidades -->
+                    <div class="mt-3.5 flex flex-wrap justify-center gap-1.5 max-w-xs">
+                        <span class="text-[10px] font-bold bg-white border border-slate-200 px-3 py-1 rounded-md shadow-sm" style="color: #0A2540;">
+                            <i class="fas fa-user-md mr-1" style="color: #0066CC;"></i>Atención Médica
+                        </span>
+                        <span class="text-[10px] font-bold bg-white border border-slate-200 px-3 py-1 rounded-md shadow-sm" style="color: #0A2540;">
+                            <i class="fas fa-heartbeat mr-1" style="color: #00A896;"></i>Salud Integral
+                        </span>
+                        <span class="text-[10px] font-bold bg-white border border-slate-200 px-3 py-1 rounded-md shadow-sm" style="color: #0A2540;">
+                            <i class="fas fa-shield-virus mr-1" style="color: #0066CC;"></i>Bienestar
+                        </span>
+                    </div>
+                </div>
+
+                <!-- ACCESOS RÁPIDOS SUPERIORES: CITA, EMERGENCIA Y CONTACTO -->
+                <div class="w-full mt-5 space-y-2.5 text-left">
+                    <!-- HAZ TU CITA (WhatsApp / Citas) -->
+                    <a href="https://wa.me/50255023530?text=Hola%20Dr.%20Fernando%20Morales,%20me%20gustar%C3%ADa%20hacer%20una%20cita." target="_blank" rel="noopener noreferrer"
+                       class="info-card w-full p-3.5 flex items-center gap-3.5 cursor-pointer group text-left shadow-md border"
+                       style="background: linear-gradient(135deg, #0A2540 0%, #0066CC 100%); border-color: #00A896;">
+                        <div class="p-2.5 rounded-xl flex-shrink-0 group-hover:scale-105 transition-transform shadow-sm border"
+                             style="background-color: #00A896; border-color: #38D9A9; color: #ffffff;">
+                            <i class="fab fa-whatsapp text-base"></i>
+                        </div>
+                        <div class="min-w-0 flex-grow">
+                            <span class="block text-[10px] font-extrabold uppercase tracking-wider text-teal-200">
+                                Haz tu cita
+                            </span>
+                            <span class="block text-sm font-black text-white tracking-wide">
+                                +502 5502-3530
+                            </span>
+                        </div>
+                        <i class="fas fa-calendar-check text-sm group-hover:translate-x-0.5 transition-all" style="color: #38D9A9;"></i>
+                    </a>
+
+                    <!-- EMERGENCIA Y CONTACTO EN DOS COLUMNAS -->
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <!-- EMERGENCIA -->
+                        <a href="tel:+50255053530"
+                           class="info-card flex items-center gap-2.5 bg-red-50/70 hover:bg-red-50 cursor-pointer group shadow-sm p-3 border border-red-300">
+                            <div class="p-2 rounded-lg flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm bg-red-600 text-white">
+                                <i class="fas fa-ambulance text-xs"></i>
+                            </div>
+                            <div class="min-w-0 flex-grow">
+                                <span class="block text-[9px] font-extrabold uppercase tracking-wider text-red-700">
+                                    Emergencia
+                                </span>
+                                <span class="block text-[11px] font-black truncate text-red-950">
+                                    502 5505-3530
+                                </span>
+                            </div>
+                        </a>
+
+                        <!-- CONTACTO -->
+                        <a href="tel:+50249871494"
+                           class="info-card flex items-center gap-2.5 bg-white hover:bg-slate-50 cursor-pointer group shadow-sm p-3 border"
+                           style="border-color: #0066CC;">
+                            <div class="p-2 rounded-lg flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm"
+                                 style="background-color: #0A2540; color: #38D9A9;">
+                                <i class="fas fa-phone-alt text-xs"></i>
+                            </div>
+                            <div class="min-w-0 flex-grow">
+                                <span class="block text-[9px] font-extrabold uppercase tracking-wider" style="color: #0066CC;">
+                                    Contacto
+                                </span>
+                                <span class="block text-[11px] font-black truncate" style="color: #0A2540;">
+                                    502 4987-1494
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- SECCIÓN PÁGINA WEB OFICIAL Y TESTIMONIOS DE PACIENTES (UBICACIÓN DESTACADA) -->
+                    <a href="https://www.doctornais.com/" target="_blank" rel="noopener noreferrer"
+                       class="info-card w-full p-4 flex items-center gap-3.5 bg-white hover:bg-slate-50 cursor-pointer group text-left shadow-md border-2 relative overflow-hidden"
+                       style="border-color: #00A896;">
+                        <div class="absolute right-0 top-0 bottom-0 w-1.5" style="background: linear-gradient(180deg, #00A896 0%, #0066CC 100%);"></div>
+                        <div class="p-2.5 rounded-xl flex-shrink-0 group-hover:scale-105 transition-transform shadow-sm"
+                             style="background: linear-gradient(135deg, #0A2540 0%, #0066CC 100%); color: #38D9A9;">
+                            <i class="fas fa-globe text-base"></i>
+                        </div>
+                        <div class="min-w-0 flex-grow">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded" style="background-color: #eef7f6; color: #007a6d;">
+                                    <i class="fas fa-check-circle mr-0.5"></i> Sitio Web Oficial
+                                </span>
+                            </div>
+                            <span class="block text-xs font-black mt-1 leading-snug" style="color: #0A2540;">
+                                Conoce testimonios reales de nuestros pacientes
+                            </span>
+                            <span class="block text-[11px] font-bold mt-0.5 truncate" style="color: #0066CC;">
+                                www.doctornais.com
+                            </span>
+                        </div>
+                        <i class="fas fa-arrow-up-right-from-square text-xs group-hover:translate-x-0.5 transition-all mr-1" style="color: #00A896;"></i>
+                    </a>
+
+                    <!-- REDES SOCIALES OFICIALES (DEBAJO DE CONTACTOS) -->
+                    <div class="pt-1.5">
+                        <div class="flex items-center justify-between px-1 pb-1.5">
+                            <span class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Redes Oficiales</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <!-- Facebook -->
+                            <a href="https://www.facebook.com/CuracionDiabetes/?locale=es_LA" target="_blank" rel="noopener noreferrer"
+                               class="info-card flex flex-col items-center justify-center bg-white hover:bg-slate-50 cursor-pointer group shadow-sm p-2.5 border text-center"
+                               style="border-color: rgba(0, 102, 204, 0.35);">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform shadow-sm"
+                                     style="background-color: #1877F2; color: #ffffff;">
+                                    <i class="fab fa-facebook-f text-xs"></i>
+                                </div>
+                                <span class="block text-[10px] font-extrabold truncate w-full" style="color: #0A2540;">
+                                    Facebook
+                                </span>
+                            </a>
+
+                            <!-- YouTube -->
+                            <a href="https://www.youtube.com/@dr.luisfernandomorales6233/featured" target="_blank" rel="noopener noreferrer"
+                               class="info-card flex flex-col items-center justify-center bg-white hover:bg-slate-50 cursor-pointer group shadow-sm p-2.5 border text-center"
+                               style="border-color: rgba(220, 38, 38, 0.35);">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform shadow-sm"
+                                     style="background-color: #FF0000; color: #ffffff;">
+                                    <i class="fab fa-youtube text-xs"></i>
+                                </div>
+                                <span class="block text-[10px] font-extrabold truncate w-full" style="color: #0A2540;">
+                                    YouTube
+                                </span>
+                            </a>
+
+                            <!-- TikTok -->
+                            <a href="https://www.tiktok.com/@dr.nais" target="_blank" rel="noopener noreferrer"
+                               class="info-card flex flex-col items-center justify-center bg-white hover:bg-slate-50 cursor-pointer group shadow-sm p-2.5 border text-center"
+                               style="border-color: rgba(0, 168, 150, 0.45);">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform shadow-sm"
+                                     style="background-color: #0A2540; color: #38D9A9;">
+                                    <i class="fab fa-tiktok text-xs"></i>
+                                </div>
+                                <span class="block text-[10px] font-extrabold truncate w-full" style="color: #0A2540;">
+                                    TikTok
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERFIL PROFESIONAL Y COMPROMISO -->
+                <div class="w-full mt-5 space-y-3 text-left">
+                    
+                    <!-- Perfil / Misión -->
+                    <div class="bg-white border border-slate-200/90 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: #0066CC;"></div>
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="w-6 h-6 rounded-md flex items-center justify-center text-white text-xs" style="background-color: #0A2540;">
+                                <i class="fas fa-notes-medical" style="color: #38D9A9;"></i>
+                            </div>
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider heading-font" style="color: #0A2540;">
+                                Compromiso Médico
+                            </h3>
+                        </div>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">
+                            Brindar atención médica integral, humana y de excelencia, enfocada en la prevención, diagnóstico oportuno y bienestar continuo de cada paciente.
+                        </p>
+                    </div>
+
+                    <!-- Visión / Servicios -->
+                    <div class="bg-white border border-slate-200/90 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: #00A896;"></div>
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="w-6 h-6 rounded-md flex items-center justify-center text-white text-xs" style="background-color: #0066CC;">
+                                <i class="fas fa-hospital-user" style="color: #ffffff;"></i>
+                            </div>
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider heading-font" style="color: #0A2540;">
+                                Dr. Nais, S.A.
+                            </h3>
+                        </div>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">
+                            Soluciones en salud con estándares modernos de calidad clínica, ética profesional y acompañamiento personalizado para usted y su familia.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- SECCIÓN DE ENLACES, CONTACTO DIRECTO Y CONSULTAS -->
+                <div class="w-full mt-6 space-y-2.5 text-left">
+                    <div class="flex items-center justify-between px-1 pb-1 border-b border-slate-200">
+                        <span class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Más Información</span>
+                        <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border" style="background-color: #eef7f6; color: #0A2540; border-color: #bce3df;">Dr. Nais, S.A.</span>
+                    </div>
+
+                    <!-- BOTÓN CORREO ELECTRÓNICO -->
+                    <a href="mailto:contacto@drnais.com" 
+                       class="info-card w-full flex items-center gap-3.5 bg-white hover:bg-slate-50 cursor-pointer group shadow-sm border"
+                       style="border-color: #0066CC;">
+                        <div class="p-2.5 rounded-lg flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm"
+                             style="background-color: #0A2540; color: #38D9A9;">
+                            <i class="fas fa-envelope text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex-grow">
+                            <span class="block text-[9px] font-extrabold uppercase tracking-wider" style="color: #0066CC;">
+                                Correo Electrónico
+                            </span>
+                            <span class="block text-xs font-extrabold transition-colors truncate" style="color: #0A2540;">
+                                contacto@drnais.com
+                            </span>
+                        </div>
+                        <i class="fas fa-paper-plane text-xs group-hover:translate-x-0.5 transition-all" style="color: #00A896;"></i>
+                    </a>
+
+                    <!-- BOTÓN UBICACIÓN / CLÍNICA -->
+                    <a href="https://maps.app.goo.gl/tsBVQoQYMToUszDN6" target="_blank" rel="noopener noreferrer" 
+                       class="info-card w-full flex items-center gap-3.5 bg-white hover:bg-slate-50 cursor-pointer group shadow-sm border"
+                       style="border-color: #0066CC;">
+                        <div class="p-2.5 rounded-lg flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm"
+                             style="background-color: #0066CC; color: #ffffff;">
+                            <i class="fas fa-map-marker-alt text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex-grow">
+                            <span class="block text-[9px] font-extrabold uppercase tracking-wider" style="color: #0066CC;">
+                                Ubicación en Guatemala
+                            </span>
+                            <span class="block text-xs font-extrabold group-hover:opacity-90 transition-opacity truncate" style="color: #0A2540;">
+                                Ver ubicación en Google Maps
+                            </span>
+                        </div>
+                        <i class="fas fa-external-link-alt text-xs group-hover:translate-x-0.5 transition-all" style="color: #00A896;"></i>
+                    </a>
+
+                    <!-- TARJETA DE HORARIOS DE ATENCIÓN -->
+                    <div class="bg-white border rounded-xl p-4 shadow-sm" style="border-color: #cbd5e1;">
+                        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-md flex items-center justify-center text-white text-xs" style="background-color: #0A2540;">
+                                    <i class="fas fa-clock" style="color: #38D9A9;"></i>
+                                </div>
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider heading-font" style="color: #0A2540;">
+                                    Horarios de Atención
+                                </h3>
+                            </div>
+                        </div>
+                        <ul class="space-y-1.5 text-xs">
+                            <li class="flex items-center justify-between py-1 px-2 rounded-md bg-slate-50/80">
+                                <span class="font-bold text-slate-700">Lunes</span>
+                                <span class="font-extrabold" style="color: #0A2540;">9:00 a. m. – 5:00 p. m.</span>
+                            </li>
+                            <li class="flex items-center justify-between py-1 px-2 rounded-md">
+                                <span class="font-bold text-slate-700">Martes</span>
+                                <span class="font-extrabold" style="color: #0A2540;">9:00 a. m. – 5:00 p. m.</span>
+                            </li>
+                            <li class="flex items-center justify-between py-1 px-2 rounded-md bg-red-50/60">
+                                <span class="font-bold text-slate-700">Miércoles</span>
+                                <span class="font-bold text-red-600">Cerrado</span>
+                            </li>
+                            <li class="flex items-center justify-between py-1 px-2 rounded-md">
+                                <span class="font-bold text-slate-700">Jueves</span>
+                                <span class="font-extrabold" style="color: #0A2540;">9:00 a. m. – 1:00 p. m.</span>
+                            </li>
+                            <li class="flex items-center justify-between py-1 px-2 rounded-md bg-slate-50/80">
+                                <span class="font-bold text-slate-700">Viernes</span>
+                                <span class="font-extrabold" style="color: #0A2540;">9:00 a. m. – 5:00 p. m.</span>
+                            </li>
+                            <li class="flex items-center justify-between py-1 px-2 rounded-md">
+                                <span class="font-bold text-slate-700">Sábado</span>
+                                <span class="font-extrabold" style="color: #0A2540;">9:00 a. m. – 1:00 p. m.</span>
+                            </li>
+                            <li class="flex items-center justify-between py-1 px-2 rounded-md bg-red-50/60">
+                                <span class="font-bold text-slate-700">Domingo</span>
+                                <span class="font-bold text-red-600">Cerrado</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center py-4 px-4 text-[11px] font-medium border-t text-slate-300" style="background-color: #051526; border-color: #0e3459;">
+            <p class="flex items-center justify-center gap-1.5">
+                <i class="fas fa-stethoscope text-xs" style="color: #38D9A9;"></i>
+                <span class="font-bold text-white heading-font">Dr. Nais, S.A.</span> 
+            </p>
+            <p class="text-[10px] text-slate-400 mt-0.5">Dr. Fernando Morales — Servicios Médicos</p>
+            <p class="text-[10px] text-slate-500 mt-1">© Todos los derechos reservados.</p>
+        </div>
+    </div>
+
+    <!-- Toast de Notificación -->
+    <div id="toast" class="toast-notification fixed bottom-5 left-1/2 -translate-x-1/2 text-white font-bold px-5 py-2.5 rounded-full text-xs shadow-2xl z-50 flex items-center gap-2 border" style="background-color: #0A2540; border-color: #00A896;">
+        <i class="fas fa-check-circle" style="color: #38D9A9;"></i>
+        <span id="toast-message">Copiado al portapapeles</span>
+    </div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        async function shareCard() {
+            const shareUrl = (window.location.href && window.location.href.startsWith('http')) 
+                ? window.location.href 
+                : 'https://www.doctornais.com/';
+
+            const shareData = {
+                title: 'Dr. Fernando Morales | Dr. Nais, S.A.',
+                text: 'Tarjeta Digital - Dr. Fernando Morales | Dr. Nais, S.A.',
+                url: shareUrl
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return;
+                }
+            }
+
+            copyToClipboard(shareUrl, "Enlace de la tarjeta copiado al portapapeles");
+        }
+
+        function copyToClipboard(text, customMessage) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            textArea.setAttribute("readonly", "");
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast(customMessage || "Copiado al portapapeles");
+                } else {
+                    showToast("Enlace: " + text);
+                }
+            } catch (err) {
+                showToast("Enlace: " + text);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>
